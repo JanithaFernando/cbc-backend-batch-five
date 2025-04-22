@@ -69,10 +69,10 @@ const orderSchema=mongoose.Schema({
     ],
     date:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 
-const Order=mongoose("order",orderSchema,)
+const Order=mongoose.model("order",orderSchema,)
 
 export default Order;
