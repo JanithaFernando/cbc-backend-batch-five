@@ -5,6 +5,7 @@ import productRouter from './routes/productRouter.js';
 import userRouter from './routes/userRouter.js';
 import jwt from 'jsonwebtoken';
 import orderRouter from './routes/orderRouter.js';
+import reviewRouter from './routes/reviewRouter.js';
 
 const app=express();
 app.use(bodyParser.json());
@@ -44,6 +45,7 @@ mongoose.connect("mongodb+srv://admin:123@cluster0.j6jlm.mongodb.net/?retryWrite
 app.use("/products",productRouter);
 app.use("/users",userRouter);
 app.use("/orders",orderRouter);
+app.use("/reviews",reviewRouter);
 
 app.listen(3000, ()=>{
     console.log('Server is runing on port 3000');
