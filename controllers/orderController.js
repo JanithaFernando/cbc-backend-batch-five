@@ -1,4 +1,5 @@
 import Order from "../models/order.js";
+import Product from "../models/products.js";
 
 export async function createOrder(req,res){
 
@@ -28,17 +29,55 @@ export async function createOrder(req,res){
         orderId="CBC"+newOrderNumberString //CBC00552
     }
     
-    const order=new Order({
-        orderId:orderId,
-        email:req.user.email,
-        name:orderInfo.name,
-        address:orderInfo.address,
-        total:0,
-        phone:orderInfo.phone,
-        products:[]
-    })
+ 
 
     try{
+        let total=0;
+        let labelledTotal=0;
+        const products=[]
+
+        for(let i=0; i<orderInfo.products.length;i++){
+       
+            const item=await Product.findOne({productId:orderInfo.products[i].productId})
+            if(item==null){
+                res.status(404).json({
+                    message:"Products with productId " + orderInfo.products[i].productId +" not found",
+
+                })
+                return
+            }
+            if(item.isAvailable==false){
+                res.status(404).json({
+                    message:"Product with productId "+ orderInfo.products[i].productId + " is not available right now"
+                })
+                return
+            }
+            products[i]={
+                productInfo:{
+                    productId:item.productId,
+                    name:item.name,
+                    altNames:item.altNames,
+                    description:item.description,
+                    images:item.images,
+                    labelledPrice:item.labelledPrice,
+                    price:item.price
+                },
+                quantity:orderInfo.products[i].qty 
+            }
+            total+=(item.price*orderInfo.products[i].qty)
+            labelledTotal+=(item.labelledPrice*orderInfo.products[i].qty)
+        }   
+
+        const order=new Order({
+            orderId:orderId,
+            email:req.user.email,
+            name:orderInfo.name,
+            address:orderInfo.address,
+            phone:orderInfo.phone,
+            products:products,
+            labelledTotal:labelledTotal,
+            total:total
+        })
         const createOrder=await order.save()
         res.json({
             message:"order created successfullly",
@@ -51,7 +90,4 @@ export async function createOrder(req,res){
         })
     }
     
-
-    //orderId generate
-    //create order object
 }
