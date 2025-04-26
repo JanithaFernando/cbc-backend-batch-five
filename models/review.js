@@ -5,14 +5,24 @@ const reviewSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    productId:{
+    email:{
         type:String,
         required:true
     },
-    comment:{
-        type:String,
-        required:true
-    },
+    comment:[
+        {
+            commentInfo:{
+                productId:{
+                    type:String,
+                    required:true
+                },
+                commentText:{
+                    type:String,
+                    required:true
+                }
+            }
+        }
+    ],
     rating:{
         type:Number,
         required:true
