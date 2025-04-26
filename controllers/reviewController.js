@@ -58,4 +58,21 @@ export async function createReview(req,res){
 
 }
 
+export async function getReviews(req,res){
+    const productId=req.body.productId
+    try{
+        
+        const review=await Review.find({"comment.commentInfo.productId":productId})
+        res.json({
+            message:review.comment.commentInfo.commentText
+        })
+        
+
+    }catch(err){
+        res.json({
+            message:"Failed to get reviews",
+            error:err
+        })
+    }
+}
 
