@@ -61,10 +61,33 @@ export async function createReview(req,res){
 export async function getReviews(req,res){
     const productId=req.body.productId
     try{
-        
+        const totalReviews=[]
+        const selectedComments=[]
         const review=await Review.find({"comment.commentInfo.productId":productId})
+
+        for(let i=0;i<review.length;i++)
+        {
+            for(let j=0;j<review[i].comment.length;j++)
+            {
+                if(review[i].comment[j].commentInfo.productId==productId)
+                {
+                    selectedComments[i]=review[i].comment[j].commentInfo.commentText
+                }
+            }
+        }
+        
+        for(let i=0;i<review.length;i++)
+        {
+            totalReviews[i]={
+                name:review[i].name,
+                comment:selectedComments[i],
+                rating:review[i].rating,
+                images:review[i].images, // did not solve how  to correct image
+                date:review[i].date   
+            } 
+        }
         res.json({
-            message:review.comment.commentInfo.commentText
+            message:totalReviews
         })
         
 
