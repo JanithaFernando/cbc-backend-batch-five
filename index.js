@@ -6,9 +6,14 @@ import userRouter from './routes/userRouter.js';
 import jwt from 'jsonwebtoken';
 import orderRouter from './routes/orderRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
+import cors from 'cors';
 
 const app=express();
+
+app.use(cors())
 app.use(bodyParser.json());
+
+
 app.use((req,res,next)=>{
     const tokenString=req.header("Authorization") 
     if (tokenString != null){
