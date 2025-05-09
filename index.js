@@ -7,7 +7,8 @@ import jwt from 'jsonwebtoken';
 import orderRouter from './routes/orderRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
 import cors from 'cors';
-
+import dotenv from 'dotenv';
+dotenv.config()
 const app=express();
 
 app.use(cors())
@@ -41,16 +42,16 @@ app.use((req,res,next)=>{
   
 });
 
-mongoose.connect("mongodb+srv://admin:123@cluster0.j6jlm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
+mongoose.connect(process.env.MONGODB_URL).then(()=>{
     console.log("Connected to the DB");
 }).catch(()=>{
     console.log("DB connection fail");
 })
 
-app.use("/products",productRouter);
-app.use("/users",userRouter);
-app.use("/orders",orderRouter);
-app.use("/reviews",reviewRouter);
+app.use("/api/products",productRouter);
+app.use("/api/users",userRouter);
+app.use("/api/orders",orderRouter);
+app.use("/api/reviews",reviewRouter);
 
 app.listen(3000, ()=>{
     console.log('Server is runing on port 3000');
