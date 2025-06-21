@@ -77,6 +77,6 @@ const orderSchema=mongoose.Schema({
     }
 })
 
-const Order=mongoose.model("order",orderSchema,)
+const Order=mongoose.model("order",orderSchema)
 
 export default Order;
